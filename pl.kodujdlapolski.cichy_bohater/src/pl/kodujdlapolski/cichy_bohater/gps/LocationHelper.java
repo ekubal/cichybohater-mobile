@@ -1,6 +1,6 @@
 package pl.kodujdlapolski.cichy_bohater.gps;
 
-import pl.kodujdlapolski.cichy_bohater.MenuActivity;
+import pl.kodujdlapolski.cichy_bohater.gui.MenuActivity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;

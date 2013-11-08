@@ -1,7 +1,9 @@
-package pl.kodujdlapolski.cichy_bohater;
+package pl.kodujdlapolski.cichy_bohater.gui;
 
+import pl.kodujdlapolski.cichy_bohater.R;
+import pl.kodujdlapolski.cichy_bohater.R.id;
+import pl.kodujdlapolski.cichy_bohater.R.layout;
 import pl.kodujdlapolski.cichy_bohater.util.SystemUiHider;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
