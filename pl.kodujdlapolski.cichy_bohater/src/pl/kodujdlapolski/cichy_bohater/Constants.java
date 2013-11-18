@@ -5,7 +5,15 @@ public interface Constants {
 
 	final String create_incident_url = "http://cichybohater.herokuapp.com/incidents";
 
-	String INCIDENT_CATEGORY_ID = "incidentCategoryId";
+	String CATEGORY_ID_EXTRA = "incidentCategoryId";
 
 	String DEFAULT_LANG = "pl";
+
+	String CATEGORIES_LIST_EXTRA = "categories_list";
+	String CATEGORY_EXTRA = "category";
+
+	String INCIDENT_DATA_EXTRA = "incident_data";
+
+	int TAKE_PHOTO_ACTION = 1;
+	int SELECT_PHOTO_ACTION = 2;
 }

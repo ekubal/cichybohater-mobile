@@ -12,5 +12,13 @@
     <string name="take_photo">Zrób zdjęcie</string>
     <string name="select_photo">Wybierz z galerii</string>
     <string name="title_activity_emergency">EmergencyActivity</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="use_gps">Użyj gps</string>
+    <string name="use_map">Wskaż na mapie</string>
+    <string name="title_activity_geolocation">GeolocationActivity</string>
+    <string name="title_activity_organization_info">OrganizationInfoActivity</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="organization_button_text">Ok, rozumiem</string>
+    <string name="title_activity_summary">SummaryActivity</string>
 
 </resources>

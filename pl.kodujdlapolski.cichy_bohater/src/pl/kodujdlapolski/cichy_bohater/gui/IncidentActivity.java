@@ -1,52 +1,51 @@
 package pl.kodujdlapolski.cichy_bohater.gui;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
+import java.util.Map;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
+import pl.kodujdlapolski.cichy_bohater.SummaryActivity;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
-import pl.kodujdlapolski.cichy_bohater.rest.CichyBohaterRestAdapter;
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class IncidentActivity extends Activity {
+public class IncidentActivity extends FragmentActivity {
 
-	private static final int TAKE_PHOTO_ACTION = 1;
-	private static final int SELECT_PHOTO_ACTION = 2;
+	private AlertDialog loadingDialog;
+	private View lastUsedView;
+	private FormFragment formFragment;
+	private Category incidentCategory;
 
-	@Override
+	public void setLastUsedView(View lastUsedView) {
+		this.lastUsedView = lastUsedView;
+	}
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// createLoadingDialog();
+
 		setContentView(R.layout.activity_incident);
 
-		Integer categoryId = getIntent().getExtras().getInt(
-				Constants.INCIDENT_CATEGORY_ID);
-		(new CategoryAsyncTask()).execute(categoryId);
+		Bundle inputExtras = getIntent().getExtras();
+		formFragment = (FormFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.form_fragment);
+		if (inputExtras != null) {
+			incidentCategory = (Category) inputExtras
+					.get(Constants.CATEGORY_EXTRA);
+		}
+
 	}
 
 	@Override
@@ -56,86 +55,94 @@ public class IncidentActivity extends Activity {
 		return true;
 	}
 
-	public void onTakePhotoClick(View view) {
-		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		startActivityForResult(takePictureIntent, TAKE_PHOTO_ACTION);
-	}
-
-	public void onSelectPhotoClick(View view) {
-		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-		photoPickerIntent.setType("image/*");
-		startActivityForResult(photoPickerIntent, SELECT_PHOTO_ACTION);
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		ImageView image = (ImageView) findViewById(R.id.image_preview);
-		Bitmap mImageBitmap = null;
-		if (requestCode == TAKE_PHOTO_ACTION && resultCode == RESULT_OK) {
-			Bundle extras = data.getExtras();
-			mImageBitmap = (Bitmap) extras.get("data");
-		} else if (requestCode == SELECT_PHOTO_ACTION
-				&& resultCode == RESULT_OK) {
-			Uri selectedImage = data.getData();
-			InputStream imageStream;
-			try {
-				imageStream = getContentResolver().openInputStream(
-						selectedImage);
-				mImageBitmap = BitmapFactory.decodeStream(imageStream);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+		Toast.makeText(this, "xx2x", Toast.LENGTH_LONG).show();
+		// formFragment.onActivityResult(requestCode, resultCode, data);
+		if (lastUsedView != null) {
+			if (requestCode == Constants.TAKE_PHOTO_ACTION
+					&& resultCode == RESULT_OK) {
+				Bundle extras = data.getExtras();
+				Bitmap mImageBitmap = (Bitmap) extras.get("data");
+				ImageView img = (ImageView) lastUsedView
+						.findViewById(R.id.form_image_preview);
+				img.setImageBitmap(mImageBitmap);
+			} else if (requestCode == Constants.SELECT_PHOTO_ACTION
+					&& resultCode == RESULT_OK) {
+
+				Uri selectedImage = data.getData();
+				InputStream imageStream;
+				try {
+					imageStream = getContentResolver().openInputStream(
+							selectedImage);
+					Bitmap mImageBitmap = BitmapFactory
+							.decodeStream(imageStream);
+					ImageView img = (ImageView) lastUsedView
+							.findViewById(R.id.form_image_preview);
+					img.setImageBitmap(mImageBitmap);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	public void onSendButtonClick(View view) {
+		Intent intent = new Intent();
+		if (incidentCategory.requireLocation()) {
+			intent.setClass(this, GeolocationActivity.class);
 		} else {
-			return;
+			intent.setClass(this, SummaryActivity.class);
 		}
-		image.setImageBitmap(mImageBitmap);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		mImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-		byte[] imageBytes = baos.toByteArray();
-		String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost post = new HttpPost(Constants.create_incident_url);
-		MultipartEntityBuilder mEntityBuilder = MultipartEntityBuilder.create();
-		mEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		try {
-			mEntityBuilder.addPart("image", new StringBody(encodedImage));
-			post.setEntity(mEntityBuilder.build());
-			HttpResponse resp = httpClient.execute(post);
-			HttpEntity entity = resp.getEntity();
-			Toast.makeText(getApplicationContext(), "" + resp.getStatusLine(),
-					Toast.LENGTH_LONG).show();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		ContentValues values = new ContentValues();
+		for (Map.Entry<String, String> entry : formFragment.getAllInputs()
+				.entrySet()) {
+			values.put(entry.getKey(), entry.getValue());
 		}
+		intent.putExtra(Constants.INCIDENT_DATA_EXTRA, values);
+		intent.putExtra(Constants.CATEGORY_EXTRA, incidentCategory);
+		startActivity(intent);
 
+		// sendToServer(formFragment.getAllInputs());
 	}
 
-	private class CategoryAsyncTask extends AsyncTask<Integer, Void, Category> {
-
-		@Override
-		protected Category doInBackground(Integer... params) {
-			if (params.length > 0) {
-				Integer categoryId = params[0];
-				CichyBohaterRestAdapter adapter = new CichyBohaterRestAdapter();
-				return adapter.getCategory(categoryId);
-			} else {
-				return null;
-			}
+	private void createLoadingDialog() {
+		if (loadingDialog != null && loadingDialog.isShowing()) {
+			loadingDialog.dismiss();
 		}
-
-		@Override
-		protected void onPostExecute(Category result) {
-			super.onPostExecute(result);
-		}
-
+		loadingDialog = LoadingDialog.createLoadingDialog(this);
+		loadingDialog.show();
 	}
+
+	// private void sendToServer(Map<String, String> data) {
+	// HttpClient httpclient = new DefaultHttpClient();
+	// HttpPost httppost = new HttpPost(Constants.create_incident_url);
+	// List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+	// data.size());
+	// for (Entry<String, String> entry : formFragment.getAllInputs()
+	// .entrySet()) {
+	// nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry
+	// .getValue()));
+	// }
+	//
+	// try {
+	// httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	// HttpResponse response = httpclient.execute(httppost);
+	// Toast.makeText(getApplicationContext(),
+	// "" + response.getStatusLine(), Toast.LENGTH_LONG).show();
+	// } catch (UnsupportedEncodingException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (ClientProtocolException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+
 }

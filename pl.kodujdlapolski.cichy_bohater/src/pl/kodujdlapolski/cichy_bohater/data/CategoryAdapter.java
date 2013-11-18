@@ -3,11 +3,13 @@ package pl.kodujdlapolski.cichy_bohater.data;
 import java.util.List;
 
 import pl.kodujdlapolski.cichy_bohater.R;
+import pl.kodujdlapolski.cichy_bohater.tasks.DownloadImageTask;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
@@ -30,10 +32,17 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 				.findViewById(R.id.category_name);
 		Category cat = values.get(position);
 		categoryName.setText(cat.getName());
+
+		ImageView categoryImage = (ImageView) view
+				.findViewById(R.id.category_image);
+		if (cat.getImageUrl() != null) {
+			(new DownloadImageTask(categoryImage, cat.getImageUrl())).execute();
+		}
 		return view;
 	}
 
 	public List<Category> getValues() {
 		return values;
 	}
+
 }
