@@ -19,6 +19,8 @@
     <string name="title_activity_organization_info">OrganizationInfoActivity</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="organization_button_text">Ok, rozumiem</string>
+    <string name="next">Dalej</string>
+    <string name="send_incident">Wyślij</string>
     <string name="title_activity_summary">SummaryActivity</string>
-
+    
 </resources>

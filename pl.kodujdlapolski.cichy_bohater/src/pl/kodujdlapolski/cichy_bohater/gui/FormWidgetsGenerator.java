@@ -17,7 +17,7 @@ public class FormWidgetsGenerator {
 
 	public static View createViewFromAttribute(
 			final CategoryAttribute attribute, final HeroFormInterface heroForm) {
-		String attributeType = attribute.getAttribute_type();
+		String attributeType = attribute.getAttributeType();
 		if (attributeType.equals("Text")) {
 			return createEditTextField(attribute, heroForm);
 		} else if (attributeType.equals("Photo")) {
@@ -36,12 +36,12 @@ public class FormWidgetsGenerator {
 		View layout = inflater.inflate(R.layout.form_fragment_edit_text, null,
 				false);
 		TextView label = (TextView) layout.findViewById(R.id.form_label);
-		label.setText(attribute.getTitle());
+		label.setText(attribute.getName());
 
 		EditText input = (EditText) layout.findViewById(R.id.form_input);
 		input.setId(ViewIdsGenerator.generateViewId());
 
-		heroForm.setViewReference(attribute.getName(), input);
+		heroForm.setViewReference(attribute.getPermalink(), input);
 		return layout;
 	}
 
@@ -55,10 +55,11 @@ public class FormWidgetsGenerator {
 		final ImageView photoImage = (ImageView) layout
 				.findViewById(R.id.form_image_preview);
 		photoImage.setId(ViewIdsGenerator.generateViewId());
-		heroForm.setViewReference(attribute.getName(), photoImage);
+		photoImage.setTag(attribute.getPermalink());
+		heroForm.setViewReference(attribute.getPermalink(), photoImage);
 
 		TextView label = (TextView) layout.findViewById(R.id.form_label);
-		label.setText(attribute.getTitle());
+		label.setText(attribute.getName());
 
 		Button takePhotoButton = (Button) layout
 				.findViewById(R.id.take_photo_button);

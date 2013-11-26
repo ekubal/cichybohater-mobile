@@ -3,7 +3,7 @@ package pl.kodujdlapolski.cichy_bohater;
 public interface Constants {
 	String LOG = "pl.kodujdlapolski.cichy_bohater";
 
-	final String create_incident_url = "http://cichybohater.herokuapp.com/incidents";
+	final String create_incident_url = "http://api.cichybohater.pl/incidents";
 
 	String CATEGORY_ID_EXTRA = "incidentCategoryId";
 
@@ -16,4 +16,6 @@ public interface Constants {
 
 	int TAKE_PHOTO_ACTION = 1;
 	int SELECT_PHOTO_ACTION = 2;
+
+	String api_server = "http://api.cichybohater.pl/";
 }

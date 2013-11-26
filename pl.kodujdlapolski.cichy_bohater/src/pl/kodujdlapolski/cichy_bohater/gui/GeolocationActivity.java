@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
+import pl.kodujdlapolski.cichy_bohater.SummaryActivity;
+import pl.kodujdlapolski.cichy_bohater.data.Category;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -19,6 +21,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,16 +40,23 @@ public class GeolocationActivity extends Activity implements LocationListener,
 	private Marker locationMarker;
 	private LocationManager locationManager;
 	private String locationProvider;
+	private ContentValues inputValues;
+	private Button okButton;
+	private Category incidentCategory;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_geolocation);
 
-		ContentValues values = (ContentValues) getIntent().getExtras().get(
+		inputValues = (ContentValues) getIntent().getExtras().get(
 				Constants.INCIDENT_DATA_EXTRA);
+		incidentCategory = (Category) getIntent().getExtras().get(
+				Constants.CATEGORY_EXTRA);
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+
+		okButton = (Button) findViewById(R.id.geolocation_ok_button);
 
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationProvider = locationManager.getBestProvider(new Criteria(),
@@ -57,6 +68,7 @@ public class GeolocationActivity extends Activity implements LocationListener,
 		}
 
 		map.setOnMapClickListener(this);
+		setTitle(incidentCategory.getName());
 
 		if (false) {
 			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -104,27 +116,7 @@ public class GeolocationActivity extends Activity implements LocationListener,
 
 			}
 		});
-	}
-
-	public String getAddress(LatLng position) {
-		Geocoder gc = new Geocoder(GeolocationActivity.this,
-				Locale.getDefault());
-		try {
-			List<Address> addressesList = gc.getFromLocation(position.latitude,
-					position.longitude, 1);
-			Address address = addressesList.get(0);
-			for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-				Log.d("=Adress=", address.getAddressLine(i));
-			}
-			locationMarker.setSnippet(address.getLocality());
-
-			return address.getThoroughfare() + " " + address.getFeatureName();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		okButton.setEnabled(true);
 	}
 
 	@Override
@@ -169,5 +161,33 @@ public class GeolocationActivity extends Activity implements LocationListener,
 	public void onMapClick(LatLng position) {
 		onLocationChanged(position);
 
+	}
+
+	private String getAddress(LatLng position) {
+		Geocoder gc = new Geocoder(GeolocationActivity.this,
+				Locale.getDefault());
+		try {
+			List<Address> addressesList = gc.getFromLocation(position.latitude,
+					position.longitude, 1);
+			Address address = addressesList.get(0);
+			for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+				Log.d("=Adress=", address.getAddressLine(i));
+			}
+			locationMarker.setSnippet(address.getLocality());
+
+			return address.getThoroughfare() + " " + address.getFeatureName();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void onOkClick(View view) {
+		Intent intent = new Intent(this, SummaryActivity.class);
+		intent.putExtra(Constants.CATEGORY_EXTRA, incidentCategory);
+		intent.putExtra(Constants.INCIDENT_DATA_EXTRA, inputValues);
+		startActivity(intent);
 	}
 }

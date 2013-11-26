@@ -28,7 +28,7 @@ public class EditTextFragment extends Fragment {
 		View v = getView();
 		TextView label = (TextView) v.findViewById(R.id.form_label);
 		EditText input = (EditText) v.findViewById(R.id.form_input);
-		label.setText(attribute.getTitle());
+		label.setText(attribute.getName());
 		input.setText("");
 
 	}

@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SummaryActivity" >
+
+    <fragment
+        android:id="@+id/summary_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/summary_footer"
+        android:layout_alignParentTop="true"
+        class="pl.kodujdlapolski.cichy_bohater.gui.SummaryFragment" />
+
+    <LinearLayout
+        android:id="@+id/summary_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/summary_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSendButtonClick"
+            android:text="@string/send_incident" />
+    </LinearLayout>
+
+</RelativeLayout>
