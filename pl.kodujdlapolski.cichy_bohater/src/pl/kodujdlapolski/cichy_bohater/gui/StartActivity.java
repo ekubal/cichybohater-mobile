@@ -20,13 +20,14 @@ public class StartActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		(new LoadingCategoriesAsyncTask("pl")).execute();
+
+		(new LoadingCategoriesAsyncTask(Constants.defaultLanguage)).execute();
 	}
 
 	// loading categories data from API
 	private class LoadingCategoriesAsyncTask extends
 			AsyncTask<String, Void, List<Category>> {
-		private String language = null;
+		private String language;
 
 		public LoadingCategoriesAsyncTask(String language) {
 			this.language = language;
@@ -34,7 +35,8 @@ public class StartActivity extends Activity {
 
 		@Override
 		protected List<Category> doInBackground(String... langs) {
-			if (!AppStatus.getInstance().isOnline(StartActivity.this)) {
+
+			if (AppStatus.getInstance().isOffline(StartActivity.this)) {
 				Intent intent = new Intent(StartActivity.this,
 						EmergencyActivity.class);
 				StartActivity.this.startActivity(intent);
@@ -48,10 +50,11 @@ public class StartActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Category> result) {
 			if (result != null) {
-				ArrayList<Category> aList = new ArrayList<Category>(result);
+				ArrayList<Category> categoriesList = new ArrayList<Category>(
+						result);
 				Intent intent = new Intent(StartActivity.this,
 						MenuActivity.class);
-				intent.putExtra(Constants.CATEGORIES_LIST_EXTRA, aList);
+				intent.putExtra(Constants.CATEGORIES_LIST_EXTRA, categoriesList);
 				StartActivity.this.startActivity(intent);
 				StartActivity.this.finish();
 			}

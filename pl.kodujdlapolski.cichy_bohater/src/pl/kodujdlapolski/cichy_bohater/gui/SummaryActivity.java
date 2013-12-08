@@ -1,4 +1,4 @@
-package pl.kodujdlapolski.cichy_bohater;
+package pl.kodujdlapolski.cichy_bohater.gui;
 
 import java.util.List;
 
@@ -10,19 +10,20 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import pl.kodujdlapolski.cichy_bohater.Constants;
+import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class SummaryActivity extends FragmentActivity {
+public class SummaryActivity extends BaseAcitivity {
 
 	private Category incidentCategory;
 	private ContentValues inputValues;
@@ -34,7 +35,7 @@ public class SummaryActivity extends FragmentActivity {
 
 		inputValues = getIncidentDataFromIntent();
 		incidentCategory = getCategoryFromIntent();
-		setTitle(incidentCategory.getName());
+		setAppTitle(incidentCategory.getName());
 
 	}
 
@@ -46,15 +47,6 @@ public class SummaryActivity extends FragmentActivity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			return (ContentValues) extras.get(Constants.INCIDENT_DATA_EXTRA);
-		} else {
-			return null;
-		}
-	}
-
-	private Category getCategoryFromIntent() {
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			return (Category) extras.get(Constants.CATEGORY_EXTRA);
 		} else {
 			return null;
 		}

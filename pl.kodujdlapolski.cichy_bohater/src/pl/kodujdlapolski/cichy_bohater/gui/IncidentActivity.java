@@ -2,16 +2,13 @@ package pl.kodujdlapolski.cichy_bohater.gui;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.SummaryActivity;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.Toast;
 
-public class IncidentActivity extends FragmentActivity {
+public class IncidentActivity extends BaseAcitivity {
 
 	private FormFragment formFragment;
 	private Category incidentCategory;
@@ -28,7 +25,6 @@ public class IncidentActivity extends FragmentActivity {
 	}
 
 	public void onSendButtonClick(View view) {
-		Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this,
 				incidentCategory.requireLocation() ? GeolocationActivity.class
 						: SummaryActivity.class);
@@ -38,12 +34,4 @@ public class IncidentActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
-	private Category getCategoryFromIntent() {
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			return (Category) extras.get(Constants.CATEGORY_EXTRA);
-		} else {
-			return null;
-		}
-	}
 }

@@ -3,6 +3,8 @@ package pl.kodujdlapolski.cichy_bohater;
 public interface Constants {
 	String LOG = "pl.kodujdlapolski.cichy_bohater";
 
+	String defaultLanguage = "pl";
+
 	final String create_incident_url = "http://api.cichybohater.pl/incidents";
 
 	String CATEGORY_ID_EXTRA = "incidentCategoryId";

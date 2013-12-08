@@ -31,10 +31,12 @@ import android.widget.LinearLayout;
 
 public class FormFragment extends Fragment implements HeroFormInterface {
 
+	// map for references to edit views
 	private Map<String, View> formViews = new HashMap<String, View>();
+	// map for bitmaps from form
 	private Map<String, Bitmap> formBitmaps = new HashMap<String, Bitmap>();
 	private Category incidentCategory;
-	private View chosenInput;
+	private View selectedInput;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,62 +52,53 @@ public class FormFragment extends Fragment implements HeroFormInterface {
 
 			List<CategoryAttribute> attributes = incidentCategory
 					.getCategoryAttributes();
-			for (CategoryAttribute attribute : attributes) {
-				View attributeView = FormWidgetsGenerator
-						.createViewFromAttribute(attribute, this);
-				if (attributeView != null) {
-					layout.addView(attributeView,
-							new LinearLayout.LayoutParams(
-									LayoutParams.MATCH_PARENT,
-									LayoutParams.WRAP_CONTENT));
-				}
-			}
+			addFormAttributes(layout, attributes);
 		}
 		return layout;
 	}
 
+	@Override
 	public void setViewReference(String fieldName, View view) {
 		formViews.put(fieldName, view);
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (chosenInput != null) {
-			if (requestCode == Constants.TAKE_PHOTO_ACTION
-					&& resultCode == Activity.RESULT_OK) {
-				ImageView imgView = (ImageView) chosenInput;
-				Bundle extras = data.getExtras();
-				Bitmap mImageBitmap = (Bitmap) extras.get("data");
-				String fieldName = (String) imgView.getTag();
-				formBitmaps.put(fieldName, mImageBitmap);
-				imgView.setImageBitmap(mImageBitmap);
-
-			} else if (requestCode == Constants.SELECT_PHOTO_ACTION
-					&& resultCode == Activity.RESULT_OK) {
-				Uri selectedImage = data.getData();
-				InputStream imageStream;
-				try {
-					imageStream = getActivity().getContentResolver()
-							.openInputStream(selectedImage);
-					Bitmap mImageBitmap = BitmapFactory
-							.decodeStream(imageStream);
-					ImageView imgView = (ImageView) chosenInput;
-					String fieldName = (String) imgView.getTag();
-					formBitmaps.put(fieldName, mImageBitmap);
-					imgView.setImageBitmap(mImageBitmap);
-				} catch (FileNotFoundException e) {
-					Log.e(Constants.LOG, e.getMessage());
-					e.printStackTrace();
-				}
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
+	public void setFormInput(View input) {
+		this.selectedInput = input;
 	}
 
 	@Override
-	public void setFormInput(View input) {
-		this.chosenInput = input;
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (selectedInput != null) {
+			ImageView imgView = (ImageView) selectedInput;
+			String fieldName = (String) imgView.getTag();
+			Bitmap mImageBitmap = null;
 
+			try {
+				if (requestCode == Constants.TAKE_PHOTO_ACTION
+						&& resultCode == Activity.RESULT_OK) {
+					mImageBitmap = (Bitmap) data.getExtras().get("data");
+				} else if (requestCode == Constants.SELECT_PHOTO_ACTION
+						&& resultCode == Activity.RESULT_OK) {
+					Uri selectedImage = data.getData();
+
+					InputStream imageStream = getActivity()
+							.getContentResolver()
+							.openInputStream(selectedImage);
+					mImageBitmap = BitmapFactory.decodeStream(imageStream);
+				} else {
+					super.onActivityResult(requestCode, resultCode, data);
+					return;
+				}
+				if (mImageBitmap != null) {
+					formBitmaps.put(fieldName, mImageBitmap);
+					imgView.setImageBitmap(mImageBitmap);
+				}
+			} catch (FileNotFoundException e) {
+				Log.e(Constants.LOG, e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public ContentValues getAllInputs() {
@@ -127,15 +120,28 @@ public class FormFragment extends Fragment implements HeroFormInterface {
 			}
 		}
 		return values;
-
 	}
 
+	// get Category object from activity intent
 	private Category getCategoryFromIntent() {
 		Bundle extras = getActivity().getIntent().getExtras();
 		if (extras != null) {
 			return (Category) extras.get(Constants.CATEGORY_EXTRA);
 		} else {
 			return null;
+		}
+	}
+
+	// add views with form inputs
+	private void addFormAttributes(LinearLayout layout,
+			List<CategoryAttribute> attributes) {
+		for (CategoryAttribute attribute : attributes) {
+			View attributeView = FormWidgetsGenerator.createViewFromAttribute(
+					attribute, this);
+			if (attributeView != null) {
+				layout.addView(attributeView, new LinearLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+			}
 		}
 	}
 }

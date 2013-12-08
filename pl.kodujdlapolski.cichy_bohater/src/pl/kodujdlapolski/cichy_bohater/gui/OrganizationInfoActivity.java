@@ -4,8 +4,6 @@ import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.Organization;
-import pl.kodujdlapolski.cichy_bohater.tasks.DownloadImageTask;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,23 +11,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class OrganizationInfoActivity extends Activity {
+import com.squareup.picasso.Picasso;
 
-	private Category selectedCategory;
+public class OrganizationInfoActivity extends BaseAcitivity {
+
+	private Category category;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_organization_info);
 
-		selectedCategory = getCategoryFromIntent();
-		if (selectedCategory != null
-				&& selectedCategory.getOrganization() != null) {
-			Organization organization = selectedCategory.getOrganization();
-			ImageView organizationLogo = (ImageView) findViewById(R.id.organization_logo);
+		category = getCategoryFromIntent();
+		if (category != null && category.getOrganization() != null) {
+			Organization organization = category.getOrganization();
+			ImageView logoView = (ImageView) findViewById(R.id.organization_logo);
 
-			(new DownloadImageTask(organizationLogo, organization.getLogoUrl()))
-					.execute();
+			Picasso.with(this).load(organization.getLogoUrl()).into(logoView);
 
 			if (organization.getName() != null) {
 				TextView organizationText = (TextView) findViewById(R.id.organization_text);
@@ -38,23 +36,16 @@ public class OrganizationInfoActivity extends Activity {
 								.fromHtml("Twoje zgłoszenie zostanie wysłane do następującej organizacji: <b>"
 										+ organization.getName() + "</b>"));
 			}
+		} else {
+			// restart application
 		}
-		setTitle(selectedCategory.getName());
+		setAppTitle(category.getName());
 	}
 
 	public void onAcceptButtonClick(View view) {
 		Intent intent = new Intent(this, IncidentActivity.class);
-		intent.putExtra(Constants.CATEGORY_EXTRA, selectedCategory);
+		intent.putExtra(Constants.CATEGORY_EXTRA, category);
 		startActivity(intent);
 		finish();
-	}
-
-	private Category getCategoryFromIntent() {
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			return (Category) extras.get(Constants.CATEGORY_EXTRA);
-		} else {
-			return null;
-		}
 	}
 }

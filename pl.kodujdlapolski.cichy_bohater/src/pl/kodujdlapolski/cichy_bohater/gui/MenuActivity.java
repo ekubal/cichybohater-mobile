@@ -7,15 +7,15 @@ import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.CategoryAdapter;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends BaseAcitivity {
 	private ListView categoriesList;
 	private Category parentCategory;
 
@@ -23,11 +23,13 @@ public class MenuActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+
 		categoriesList = (ListView) findViewById(R.id.categories_list);
+		ActionBar actionBar = getSupportActionBar();
 
 		parentCategory = getCategoryFromIntent();
 		if (parentCategory != null) {
-			setTitle(parentCategory.getName());
+			actionBar.setTitle(parentCategory.getName());
 		}
 
 		List<Category> categories = getCategoriesFromIntent();
@@ -65,23 +67,5 @@ public class MenuActivity extends Activity {
 				startActivity(destinationIntent);
 			}
 		});
-	}
-
-	private List<Category> getCategoriesFromIntent() {
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			return (List<Category>) extras.get(Constants.CATEGORIES_LIST_EXTRA);
-		} else {
-			return null;
-		}
-	}
-
-	private Category getCategoryFromIntent() {
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			return (Category) extras.get(Constants.CATEGORY_EXTRA);
-		} else {
-			return null;
-		}
 	}
 }

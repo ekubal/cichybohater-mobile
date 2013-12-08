@@ -11,14 +11,13 @@
         android:id="@+id/form_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textColor="#FF0000" />
+        android:text="@string/example_text" />
 
     <EditText
         android:id="@+id/form_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10" android:inputType="text">
 
         <requestFocus />
     </EditText>

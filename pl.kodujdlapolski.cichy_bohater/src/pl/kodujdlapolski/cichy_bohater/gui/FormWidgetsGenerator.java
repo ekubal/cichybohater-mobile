@@ -36,11 +36,9 @@ public class FormWidgetsGenerator {
 		View layout = inflater.inflate(R.layout.form_fragment_edit_text, null,
 				false);
 		TextView label = (TextView) layout.findViewById(R.id.form_label);
-		label.setText(attribute.getName());
+		label.setText(attribute.getName() + ":");
 
 		EditText input = (EditText) layout.findViewById(R.id.form_input);
-		input.setId(ViewIdsGenerator.generateViewId());
-
 		heroForm.setViewReference(attribute.getPermalink(), input);
 		return layout;
 	}
@@ -54,12 +52,11 @@ public class FormWidgetsGenerator {
 				null, false);
 		final ImageView photoImage = (ImageView) layout
 				.findViewById(R.id.form_image_preview);
-		photoImage.setId(ViewIdsGenerator.generateViewId());
 		photoImage.setTag(attribute.getPermalink());
 		heroForm.setViewReference(attribute.getPermalink(), photoImage);
 
 		TextView label = (TextView) layout.findViewById(R.id.form_label);
-		label.setText(attribute.getName());
+		label.setText(attribute.getName() + ":");
 
 		Button takePhotoButton = (Button) layout
 				.findViewById(R.id.take_photo_button);
@@ -88,8 +85,6 @@ public class FormWidgetsGenerator {
 						Constants.SELECT_PHOTO_ACTION);
 			}
 		});
-
 		return layout;
-
 	}
 }

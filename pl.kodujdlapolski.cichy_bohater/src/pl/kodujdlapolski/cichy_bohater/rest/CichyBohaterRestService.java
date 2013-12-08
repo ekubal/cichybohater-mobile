@@ -13,4 +13,5 @@ public interface CichyBohaterRestService {
 
 	@GET("/categories/{id}")
 	Category getCategory(@Path("id") Integer id);
+
 }

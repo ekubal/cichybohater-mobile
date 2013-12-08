@@ -50,4 +50,8 @@ public class AppStatus {
 		}
 		return false;
 	}
+
+	public boolean isOffline(Context context) {
+		return !isOnline(context);
+	}
 }

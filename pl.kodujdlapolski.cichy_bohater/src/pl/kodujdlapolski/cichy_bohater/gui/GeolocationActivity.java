@@ -6,9 +6,7 @@ import java.util.Locale;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.SummaryActivity;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.location.Address;
@@ -19,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -28,13 +27,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GeolocationActivity extends Activity implements LocationListener,
-		OnMapClickListener {
+public class GeolocationActivity extends FragmentActivity implements
+		LocationListener, OnMapClickListener {
 	private Location currentLocation;
 	private GoogleMap map;
 	private Marker locationMarker;
@@ -53,8 +51,8 @@ public class GeolocationActivity extends Activity implements LocationListener,
 				Constants.INCIDENT_DATA_EXTRA);
 		incidentCategory = (Category) getIntent().getExtras().get(
 				Constants.CATEGORY_EXTRA);
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		// map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+		// .getMap();
 
 		okButton = (Button) findViewById(R.id.geolocation_ok_button);
 

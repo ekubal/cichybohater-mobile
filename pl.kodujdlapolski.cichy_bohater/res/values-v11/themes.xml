@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- the theme applied to the application or activity -->
+    <style name="CichyBohaterTheme" parent="android:Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/WhiteActionBar</item>
+        <item name="android:actionBarTabTextStyle">@style/WhiteActionBarTabText</item>
+        <item name="android:actionMenuTextColor">@color/actionbar_text</item>
+    </style>
+
+    <style name="WhiteActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@color/actionbar_background</item>
+        <item name="android:titleTextStyle">@style/WhiteActionBarTitleText</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="WhiteActionBarTitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/actionbar_text</item>
+    </style>
+
+    <style name="WhiteActionBarTabText" parent="android:Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">@color/actionbar_text</item>
+    </style>
+
+</resources>

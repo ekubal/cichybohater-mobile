@@ -11,14 +11,14 @@
         android:id="@+id/form_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/example_text" />
 
     <ImageView
         android:id="@+id/form_image_preview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/camera" />
 
     <LinearLayout
         android:layout_width="match_parent"
