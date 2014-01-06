@@ -10,12 +10,14 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -33,10 +35,15 @@ public class SummaryActivity extends BaseAcitivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_summary);
 
-		inputValues = getIncidentDataFromIntent();
+		inputValues = IncidentActivity.getFormData();
+		// for (Entry<String, Object> e : inputValues.valueSet()) {
+		// String key = e.getKey();
+		// Log.v("Key", key);
+		// Log.v("Value", e.getValue().toString());
+		// }
+
 		incidentCategory = getCategoryFromIntent();
 		setAppTitle(incidentCategory.getName());
-
 	}
 
 	public void onSendButtonClick(View view) {
@@ -70,6 +77,8 @@ public class SummaryActivity extends BaseAcitivity {
 		protected void onPostExecute(HttpEntity result) {
 			Toast.makeText(SummaryActivity.this, "Odebrano...",
 					Toast.LENGTH_LONG).show();
+			startActivity(new Intent(SummaryActivity.this, ThanksActivity.class));
+			finish();
 			super.onPostExecute(result);
 		}
 
@@ -90,16 +99,31 @@ public class SummaryActivity extends BaseAcitivity {
 					.getCategoryAttributes();
 
 			for (CategoryAttribute attribute : categoryAttributes) {
-				String value = inputValues
-						.getAsString(attribute.getPermalink());
-				if (value != null) {
-					entityBuilder
-							.addTextBody("incident[" + attribute.getPermalink()
-									+ "]", value);
+				if (attribute.getAttributeType().equals("Text")) {
+					String value = inputValues.getAsString(attribute
+							.getPermalink());
+					if (value != null) {
+						entityBuilder.addTextBody(
+								"incident[" + attribute.getPermalink() + "]",
+								value);
+
+					}
+				} else {
+					byte[] value = inputValues.getAsByteArray(attribute
+							.getPermalink());
+					if (value != null) {
+						entityBuilder.addBinaryBody(
+								"incident[" + attribute.getPermalink() + "]",
+								value);
+					}
+					Log.v("len", "" + value.length);
 				}
+
 			}
 			entityBuilder.addTextBody("category_id", incidentCategory.getId()
 					.toString());
+			entityBuilder.addTextBody("device_id", AppStatus.getInstance()
+					.getDeviceId(this));
 			entityBuilder.addTextBody("phone_number", getMyPhoneNumber());
 			final HttpEntity reqEntity = entityBuilder.build();
 

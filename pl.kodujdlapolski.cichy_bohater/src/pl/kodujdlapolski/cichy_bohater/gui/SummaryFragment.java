@@ -7,11 +7,8 @@ import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
 import android.content.ContentValues;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +19,6 @@ import android.widget.TextView;
 public class SummaryFragment extends Fragment {
 	private Category incidentCategory;
 	private ContentValues inputValues;
-
-	public SummaryFragment() {
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	public void setArguments(Bundle args) {
@@ -42,8 +35,7 @@ public class SummaryFragment extends Fragment {
 					.get(Constants.CATEGORY_EXTRA);
 		}
 		if (inputValues == null) {
-			inputValues = (ContentValues) getActivity().getIntent().getExtras()
-					.get(Constants.INCIDENT_DATA_EXTRA);
+			inputValues = IncidentActivity.getFormData();
 		}
 		setRetainInstance(true);
 
@@ -76,11 +68,11 @@ public class SummaryFragment extends Fragment {
 				attributeLabel.setText(attribute.getPermalink() + ":");
 				ImageView imageView = (ImageView) layout
 						.findViewById(R.id.summary_photo);
-				byte[] encodeByte = Base64.decode(attributeValue,
-						Base64.DEFAULT);
-				Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
-						encodeByte.length);
-				imageView.setImageBitmap(bitmap);
+				// byte[] encodeByte = Base64.decode(attributeValue,
+				// Base64.DEFAULT);
+				// Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
+				// encodeByte.length);
+				// imageView.setImageBitmap(bitmap);
 				fragmentLayout.addView(layout);
 			}
 		}

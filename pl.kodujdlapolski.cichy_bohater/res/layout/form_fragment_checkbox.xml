@@ -7,18 +7,10 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp" >
 
-    <TextView
-        android:id="@+id/form_label"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/example_text" />
-
-    <EditText
+    <CheckBox
         android:id="@+id/form_input"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text" >
-    </EditText>
+        android:text="CheckBox" />
 
 </LinearLayout>

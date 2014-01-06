@@ -3,14 +3,23 @@ package pl.kodujdlapolski.cichy_bohater;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
-public class AppStatus {
+public class AppStatus implements LocationListener {
 	private static AppStatus instance = new AppStatus();
+	private Location location;
 
 	private AppStatus() {
 	}
@@ -54,4 +63,80 @@ public class AppStatus {
 	public boolean isOffline(Context context) {
 		return !isOnline(context);
 	}
+
+	public String getDeviceId(Context context) {
+		TelephonyManager telephoneManager = (TelephonyManager) context
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		return telephoneManager.getDeviceId();
+	}
+
+	public String getLanguage() {
+		String lang = Locale.getDefault().getLanguage();
+		if (lang == null) {
+			lang = Constants.defaultLanguage;
+		}
+		return lang;
+	}
+
+	public String getCountryCode() {
+		String lang = Locale.getDefault().getCountry();
+		if (lang == null) {
+			lang = "";
+		}
+		return lang;
+	}
+
+	public void setCurrentLocation(Location location) {
+		this.location = location;
+	}
+
+	private static Location getCurrentLocation() {
+		return getInstance().location;
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		this.location = location;
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String getCurrentAddress(Context context) {
+		if (location != null) {
+			Geocoder gc = new Geocoder(context, Locale.getDefault());
+			try {
+				List<Address> addressesList = gc.getFromLocation(
+						location.getLatitude(), location.getLongitude(), 1);
+				Address address = addressesList.get(0);
+				// for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+				// Log.e("=Adress=", address.getAddressLine(i));
+				// }
+
+				return address.getFeatureName() + "\n"
+						+ address.getPostalCode() + " " + address.getLocality();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 }

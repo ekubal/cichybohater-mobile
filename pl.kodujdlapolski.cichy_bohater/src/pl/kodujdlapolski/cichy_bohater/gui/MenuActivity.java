@@ -9,7 +9,6 @@ import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.CategoryAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,11 +24,10 @@ public class MenuActivity extends BaseAcitivity {
 		setContentView(R.layout.activity_menu);
 
 		categoriesList = (ListView) findViewById(R.id.categories_list);
-		ActionBar actionBar = getSupportActionBar();
 
 		parentCategory = getCategoryFromIntent();
 		if (parentCategory != null) {
-			actionBar.setTitle(parentCategory.getName());
+			setAppTitle(parentCategory.getName());
 		}
 
 		List<Category> categories = getCategoriesFromIntent();

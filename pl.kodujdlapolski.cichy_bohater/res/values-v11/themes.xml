@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- the theme applied to the application or activity -->
-    <style name="CichyBohaterTheme" parent="android:Theme.Holo.Light">
+    <style name="CichyBohaterTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/WhiteActionBar</item>
         <item name="android:actionBarTabTextStyle">@style/WhiteActionBarTabText</item>
         <item name="android:actionMenuTextColor">@color/actionbar_text</item>

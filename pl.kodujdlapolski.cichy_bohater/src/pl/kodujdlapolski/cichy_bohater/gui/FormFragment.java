@@ -104,13 +104,12 @@ public class FormFragment extends Fragment implements HeroFormInterface {
 	public ContentValues getAllInputs() {
 		ContentValues values = new ContentValues();
 		for (Entry<String, View> entry : formViews.entrySet()) {
-			Log.d(Constants.LOG, entry.getKey());
-			View v = entry.getValue();
-			if (v instanceof EditText) {
-				EditText editText = (EditText) v;
+			View view = entry.getValue();
+			if (view instanceof EditText) {
+				EditText editText = (EditText) view;
 				values.put(entry.getKey(), editText.getText().toString());
-			} else if (v instanceof ImageView) {
-				ImageView imgView = (ImageView) v;
+			} else if (view instanceof ImageView) {
+				ImageView imgView = (ImageView) view;
 				Bitmap bitmap = formBitmaps.get(imgView.getTag());
 				if (bitmap != null) {
 					ByteArrayOutputStream bao = new ByteArrayOutputStream();

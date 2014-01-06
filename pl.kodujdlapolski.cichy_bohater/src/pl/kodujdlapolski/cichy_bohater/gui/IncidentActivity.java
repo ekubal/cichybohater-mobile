@@ -12,6 +12,7 @@ public class IncidentActivity extends BaseAcitivity {
 
 	private FormFragment formFragment;
 	private Category incidentCategory;
+	private static ContentValues formData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +29,12 @@ public class IncidentActivity extends BaseAcitivity {
 		Intent intent = new Intent(this,
 				incidentCategory.requireLocation() ? GeolocationActivity.class
 						: SummaryActivity.class);
-		ContentValues values = formFragment.getAllInputs();
-		intent.putExtra(Constants.INCIDENT_DATA_EXTRA, values);
+		formData = formFragment.getAllInputs();
 		intent.putExtra(Constants.CATEGORY_EXTRA, incidentCategory);
 		startActivity(intent);
 	}
 
+	public static ContentValues getFormData() {
+		return formData;
+	}
 }

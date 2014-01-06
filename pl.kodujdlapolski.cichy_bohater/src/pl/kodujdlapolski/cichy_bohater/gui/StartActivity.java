@@ -9,19 +9,41 @@ import pl.kodujdlapolski.cichy_bohater.EmergencyActivity;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.rest.CichyBohaterRestAdapter;
-import android.app.Activity;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-public class StartActivity extends Activity {
+public class StartActivity extends BaseAcitivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
-		(new LoadingCategoriesAsyncTask(Constants.defaultLanguage)).execute();
+		// enable localization service
+		final LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		String locationProvider = locManager.getBestProvider(new Criteria(),
+				false);
+
+		Location currentLocation = locManager
+				.getLastKnownLocation(locationProvider);
+		if (currentLocation == null) {
+			Intent intent = new Intent(StartActivity.this,
+					EmergencyActivity.class);
+			startActivity(intent);
+			finish();
+		} else {
+			AppStatus.getInstance().setCurrentLocation(currentLocation);
+			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+					10000, 1, AppStatus.getInstance());
+			locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+					10000, 1, AppStatus.getInstance());
+			(new LoadingCategoriesAsyncTask(AppStatus.getInstance()
+					.getLanguage())).execute();
+		}
 	}
 
 	// loading categories data from API

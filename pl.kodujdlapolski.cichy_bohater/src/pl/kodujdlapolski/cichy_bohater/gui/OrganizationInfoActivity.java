@@ -1,5 +1,7 @@
 package pl.kodujdlapolski.cichy_bohater.gui;
 
+import java.util.ArrayList;
+
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
@@ -36,10 +38,16 @@ public class OrganizationInfoActivity extends BaseAcitivity {
 								.fromHtml("Twoje zgłoszenie zostanie wysłane do następującej organizacji: <b>"
 										+ organization.getName() + "</b>"));
 			}
+			setAppTitle(category.getName());
 		} else {
-			// restart application
+			ArrayList<Category> categories = new ArrayList<Category>(
+					getCategoriesFromIntent());
+
+			Intent intent = new Intent(this, MenuActivity.class);
+			intent.putExtra(Constants.CATEGORIES_LIST_EXTRA, categories);
+			startActivity(intent);
+			finish();
 		}
-		setAppTitle(category.getName());
 	}
 
 	public void onAcceptButtonClick(View view) {

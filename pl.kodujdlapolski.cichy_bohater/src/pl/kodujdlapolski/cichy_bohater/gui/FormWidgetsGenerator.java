@@ -6,9 +6,11 @@ import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,8 +20,15 @@ public class FormWidgetsGenerator {
 	public static View createViewFromAttribute(
 			final CategoryAttribute attribute, final HeroFormInterface heroForm) {
 		String attributeType = attribute.getAttributeType();
-		if (attributeType.equals("Text")) {
-			return createEditTextField(attribute, heroForm);
+		if (attributeType.equals("Checkbox")) {
+			return createCheckboxField(attribute, heroForm);
+		} else if (attributeType.equals("Text")) {
+			return createEditTextField(attribute, heroForm,
+					InputType.TYPE_CLASS_TEXT);
+		} else if (attributeType.equals("Number")) {
+			return createEditTextField(attribute, heroForm,
+					InputType.TYPE_CLASS_NUMBER
+							| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		} else if (attributeType.equals("Photo")) {
 			return createPhotoField(attribute, heroForm);
 		} else {
@@ -29,7 +38,7 @@ public class FormWidgetsGenerator {
 	}
 
 	private static View createEditTextField(final CategoryAttribute attribute,
-			final HeroFormInterface heroForm) {
+			final HeroFormInterface heroForm, int inputType) {
 		Context context = heroForm.getActivity();
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -39,6 +48,23 @@ public class FormWidgetsGenerator {
 		label.setText(attribute.getName() + ":");
 
 		EditText input = (EditText) layout.findViewById(R.id.form_input);
+		input.setInputType(inputType);
+
+		heroForm.setViewReference(attribute.getPermalink(), input);
+		return layout;
+	}
+
+	private static View createCheckboxField(final CategoryAttribute attribute,
+			final HeroFormInterface heroForm) {
+		Context context = heroForm.getActivity();
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.form_fragment_checkbox, null,
+				false);
+
+		CheckBox input = (CheckBox) layout.findViewById(R.id.form_input);
+		input.setText(attribute.getName());
+
 		heroForm.setViewReference(attribute.getPermalink(), input);
 		return layout;
 	}

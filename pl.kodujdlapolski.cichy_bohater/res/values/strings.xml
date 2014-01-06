@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cichy Bohater</string>
 
+    <string name="app_name">Cichy Bohater</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_location_alert">LocationAlertActivity</string>
@@ -17,7 +17,7 @@
     <string name="send_incident">Wyślij</string>
     <string name="title_activity_summary">SummaryActivity</string>
     <string name="find_me">Znajdź mnie</string>
-    
     <string name="example_text">Example text</string>
-    
+    <string name="title_activity_thanks">ThanksActivity</string>
+
 </resources>
