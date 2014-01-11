@@ -9,10 +9,12 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class FormWidgetsGenerator {
@@ -20,7 +22,9 @@ public class FormWidgetsGenerator {
 	public static View createViewFromAttribute(
 			final CategoryAttribute attribute, final HeroFormInterface heroForm) {
 		String attributeType = attribute.getAttributeType();
-		if (attributeType.equals("Checkbox")) {
+		if (attributeType.equals("Select")) {
+			return createSelectField(attribute, heroForm);
+		} else if (attributeType.equals("Checkbox")) {
 			return createCheckboxField(attribute, heroForm);
 		} else if (attributeType.equals("Text")) {
 			return createEditTextField(attribute, heroForm,
@@ -68,6 +72,28 @@ public class FormWidgetsGenerator {
 
 		CheckBox input = (CheckBox) layout.findViewById(R.id.form_input);
 		input.setText(attribute.getName());
+
+		heroForm.setViewReference(attribute.getPermalink(), input);
+		return layout;
+	}
+
+	private static View createSelectField(final CategoryAttribute attribute,
+			final HeroFormInterface heroForm) {
+		Context context = heroForm.getActivity();
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.form_fragment_select, null,
+				false);
+
+		TextView label = (TextView) layout.findViewById(R.id.form_label);
+		label.setText(attribute.getName() + ":");
+
+		Spinner input = (Spinner) layout.findViewById(R.id.form_input);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+				android.R.layout.simple_spinner_dropdown_item,
+				attribute.getPossibleValues());
+
+		input.setAdapter(adapter);
 
 		heroForm.setViewReference(attribute.getPermalink(), input);
 		return layout;

@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="10dp" >
+    android:paddingBottom="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
 
     <TextView
-        android:id="@+id/summary_label"
-        android:layout_width="match_parent"
+        android:id="@+id/form_label"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/summary_photo"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/form_input"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="" >
-    </ImageView>
+        android:background="@drawable/category_list_item_shape" />
 
 </LinearLayout>

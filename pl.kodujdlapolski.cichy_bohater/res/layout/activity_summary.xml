@@ -2,15 +2,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
     tools:context=".SummaryActivity" >
 
-    <fragment
-        android:id="@+id/summary_fragment"
+    <TextView
+        android:id="@+id/summary_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/summary_header"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/summary_inputs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/summary_footer"
-        android:layout_alignParentTop="true"
-        class="pl.kodujdlapolski.cichy_bohater.gui.SummaryFragment" />
+        android:layout_below="@+id/summary_header"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/category_list_item_shape"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp" >
+
+        <TextView
+            android:id="@+id/summary_category"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/summary_footer"
@@ -21,10 +48,11 @@
 
         <Button
             android:id="@+id/summary_button"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="onSendButtonClick"
-            android:text="@string/send_incident" />
+            android:text="@string/send_incident"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

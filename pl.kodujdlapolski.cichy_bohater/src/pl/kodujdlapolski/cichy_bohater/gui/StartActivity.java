@@ -5,7 +5,6 @@ import java.util.List;
 
 import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
-import pl.kodujdlapolski.cichy_bohater.EmergencyActivity;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.rest.CichyBohaterRestAdapter;
@@ -31,10 +30,10 @@ public class StartActivity extends BaseAcitivity {
 		Location currentLocation = locManager
 				.getLastKnownLocation(locationProvider);
 		if (currentLocation == null) {
-			Intent intent = new Intent(StartActivity.this,
-					EmergencyActivity.class);
-			startActivity(intent);
-			finish();
+			// Intent intent = new Intent(StartActivity.this,
+			// EmergencyActivity.class);
+			// startActivity(intent);
+			// finish();
 		} else {
 			AppStatus.getInstance().setCurrentLocation(currentLocation);
 
@@ -58,10 +57,10 @@ public class StartActivity extends BaseAcitivity {
 		protected List<Category> doInBackground(String... langs) {
 
 			if (AppStatus.getInstance().isOffline(StartActivity.this)) {
-				Intent intent = new Intent(StartActivity.this,
-						EmergencyActivity.class);
-				StartActivity.this.startActivity(intent);
-				StartActivity.this.finish();
+				// Intent intent = new Intent(StartActivity.this,
+				// EmergencyActivity.class);
+				// StartActivity.this.startActivity(intent);
+				// StartActivity.this.finish();
 				return null;
 			}
 			CichyBohaterRestAdapter adapter = new CichyBohaterRestAdapter();

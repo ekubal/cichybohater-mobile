@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:background="@android:color/darker_gray"
         android:gravity="center"
         android:paddingBottom="5dp"
@@ -23,20 +22,17 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/incident_form"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/send_buttons"
         android:layout_alignParentTop="true"
         android:src="@drawable/cichybohater_icon" >
 
-        <fragment
-            android:id="@+id/form_fragment"
+        <LinearLayout
+            android:id="@+id/incident_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            class="pl.kodujdlapolski.cichy_bohater.gui.FormFragment"
-            android:tag="form_fragment_tag" >
-        </fragment>
+            android:orientation="vertical" />
     </ScrollView>
 
 </RelativeLayout>

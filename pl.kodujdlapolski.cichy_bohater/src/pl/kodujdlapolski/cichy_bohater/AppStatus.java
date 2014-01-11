@@ -91,7 +91,7 @@ public class AppStatus implements LocationListener {
 		this.location = location;
 	}
 
-	private static Location getCurrentLocation() {
+	public static Location getCurrentLocation() {
 		return getInstance().location;
 	}
 
@@ -128,7 +128,13 @@ public class AppStatus implements LocationListener {
 				// for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
 				// Log.e("=Adress=", address.getAddressLine(i));
 				// }
-
+				Log.e("Thoroughfare", address.getThoroughfare());
+				if (address.getSubThoroughfare() != null)
+					Log.e("SubThoroughfare", address.getSubThoroughfare());
+				if (address.getLocality() != null)
+					Log.e("Locality", address.getLocality());
+				if (address.getSubLocality() != null)
+					Log.e("SubLocality", address.getSubLocality());
 				return address.getFeatureName() + "\n"
 						+ address.getPostalCode() + " " + address.getLocality();
 

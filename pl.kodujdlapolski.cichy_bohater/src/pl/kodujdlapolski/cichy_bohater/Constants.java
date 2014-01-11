@@ -20,4 +20,6 @@ public interface Constants {
 	int SELECT_PHOTO_ACTION = 2;
 
 	String api_server = "http://api.cichybohater.pl/";
+
+	String ERROR_MESSAGE = "error_message";
 }

@@ -25,7 +25,7 @@
         android:label="@string/app_name"
         android:theme="@style/CichyBohaterTheme" >
         <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.StartActivity"
+            android:name=".gui.StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,36 +34,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.MenuActivity"
+            android:name=".gui.MenuActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.IncidentActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.OrganizationInfoActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.ErrorActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.SummaryActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".gui.ThanksActivity"
             android:label="@string/app_name" >
 
+            <!-- android:parentActivityName="pl.kodujdlapolski.cichy_bohater.gui.MenuActivity" -->
             <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                 <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.kodujdlapolski.cichy_bohater.gui.MenuActivity" />
             -->
-        </activity>
-        <activity android:name="pl.kodujdlapolski.cichy_bohater.LocationAlertActivity" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.IncidentActivity"
-            android:label="@string/title_activity_incident" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.EmergencyActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.GeolocationActivity"
-            android:label="@string/title_activity_geolocation" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.OrganizationInfoActivity"
-            android:label="@string/app_name" >
         </activity>
 
         <meta-data
@@ -72,23 +71,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.SummaryActivity"
-            android:label="@string/title_activity_summary" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.EmergencyActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="pl.kodujdlapolski.cichy_bohater.gui.ThanksActivity"
-            android:label="@string/title_activity_thanks"
-            android:parentActivityName="pl.kodujdlapolski.cichy_bohater.gui.BaseAcitivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="pl.kodujdlapolski.cichy_bohater.gui.BaseAcitivity" />
-        </activity>
     </application>
 
 </manifest>
