@@ -2,6 +2,7 @@ package pl.kodujdlapolski.cichy_bohater.gui;
 
 import java.util.List;
 
+import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import android.os.Bundle;
@@ -34,5 +35,17 @@ public abstract class BaseAcitivity extends ActionBarActivity {
 
 	protected void setAppTitle(int appTitleResource) {
 		getSupportActionBar().setTitle(appTitleResource);
+	}
+
+	@Override
+	public void onPause() {
+		AppStatus.getInstance().disableLocationUpdates(this);
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		AppStatus.getInstance().enableLocationUpdates(this);
+		super.onResume();
 	}
 }

@@ -8,13 +8,14 @@
     <ImageView
         android:id="@+id/start_image"
         android:layout_width="wrap_content"
+        android:layout_marginBottom="40dp"
         android:layout_height="wrap_content"
         android:src="@drawable/start_background" />
 
     <ProgressBar
         android:id="@+id/start_progressbar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp" />

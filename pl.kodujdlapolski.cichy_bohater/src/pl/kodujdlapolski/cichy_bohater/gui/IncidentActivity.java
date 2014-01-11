@@ -22,13 +22,10 @@ public class IncidentActivity extends BaseAcitivity {
 		formFragment = (FormFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.form_fragment);
 		incidentCategory = getCategoryFromIntent();
-
 	}
 
 	public void onSendButtonClick(View view) {
-		Intent intent = new Intent(this,
-				incidentCategory.requireLocation() ? GeolocationActivity.class
-						: SummaryActivity.class);
+		Intent intent = new Intent(this, SummaryActivity.class);
 		formData = formFragment.getAllInputs();
 		intent.putExtra(Constants.CATEGORY_EXTRA, incidentCategory);
 		startActivity(intent);

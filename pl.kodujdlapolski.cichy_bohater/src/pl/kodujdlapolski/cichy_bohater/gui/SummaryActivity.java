@@ -99,24 +99,33 @@ public class SummaryActivity extends BaseAcitivity {
 					.getCategoryAttributes();
 
 			for (CategoryAttribute attribute : categoryAttributes) {
-				if (attribute.getAttributeType().equals("Text")) {
-					String value = inputValues.getAsString(attribute
-							.getPermalink());
-					if (value != null) {
-						entityBuilder.addTextBody(
-								"incident[" + attribute.getPermalink() + "]",
-								value);
-
-					}
-				} else {
+				if (attribute.getAttributeType().equals("Photo")) {
 					byte[] value = inputValues.getAsByteArray(attribute
 							.getPermalink());
 					if (value != null) {
 						entityBuilder.addBinaryBody(
 								"incident[" + attribute.getPermalink() + "]",
 								value);
+						Log.v("len", "" + value.length);
 					}
-					Log.v("len", "" + value.length);
+				} else if (attribute.getAttributeType().equals("Checkbox")) {
+					String value = inputValues.getAsString(attribute
+							.getPermalink());
+					if (value != null) {
+						entityBuilder.addTextBody(
+								"incident[" + attribute.getPermalink() + "]",
+								value);
+					}
+				}
+
+				else {
+					String value = inputValues.getAsString(attribute
+							.getPermalink());
+					if (value != null) {
+						entityBuilder.addTextBody(
+								"incident[" + attribute.getPermalink() + "]",
+								value);
+					}
 				}
 
 			}

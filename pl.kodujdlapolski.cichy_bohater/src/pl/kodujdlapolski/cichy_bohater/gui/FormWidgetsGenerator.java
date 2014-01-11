@@ -25,6 +25,10 @@ public class FormWidgetsGenerator {
 		} else if (attributeType.equals("Text")) {
 			return createEditTextField(attribute, heroForm,
 					InputType.TYPE_CLASS_TEXT);
+		} else if (attributeType.equals("Textarea")) {
+			return createEditTextField(attribute, heroForm,
+					InputType.TYPE_CLASS_TEXT
+							| InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 		} else if (attributeType.equals("Number")) {
 			return createEditTextField(attribute, heroForm,
 					InputType.TYPE_CLASS_NUMBER

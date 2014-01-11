@@ -19,5 +19,6 @@
     <string name="find_me">Znajdź mnie</string>
     <string name="example_text">Example text</string>
     <string name="title_activity_thanks">ThanksActivity</string>
+    <string name="organization_info_header">Twoje zgłoszenie zostanie wysłane do</string>
 
 </resources>

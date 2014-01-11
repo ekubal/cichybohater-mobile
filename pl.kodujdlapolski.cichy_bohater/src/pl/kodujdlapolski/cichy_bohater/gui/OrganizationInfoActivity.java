@@ -1,14 +1,11 @@
 package pl.kodujdlapolski.cichy_bohater.gui;
 
-import java.util.ArrayList;
-
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
 import pl.kodujdlapolski.cichy_bohater.data.Organization;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,22 +28,9 @@ public class OrganizationInfoActivity extends BaseAcitivity {
 
 			Picasso.with(this).load(organization.getLogoUrl()).into(logoView);
 
-			if (organization.getName() != null) {
-				TextView organizationText = (TextView) findViewById(R.id.organization_text);
-				organizationText
-						.setText(Html
-								.fromHtml("Twoje zgłoszenie zostanie wysłane do następującej organizacji: <b>"
-										+ organization.getName() + "</b>"));
-			}
+			TextView organizationText = (TextView) findViewById(R.id.organization_text);
+			organizationText.setText(R.string.organization_info_header);
 			setAppTitle(category.getName());
-		} else {
-			ArrayList<Category> categories = new ArrayList<Category>(
-					getCategoriesFromIntent());
-
-			Intent intent = new Intent(this, MenuActivity.class);
-			intent.putExtra(Constants.CATEGORIES_LIST_EXTRA, categories);
-			startActivity(intent);
-			finish();
 		}
 	}
 

@@ -37,10 +37,9 @@ public class StartActivity extends BaseAcitivity {
 			finish();
 		} else {
 			AppStatus.getInstance().setCurrentLocation(currentLocation);
-			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-					10000, 1, AppStatus.getInstance());
-			locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-					10000, 1, AppStatus.getInstance());
+
+			AppStatus.getInstance().enableLocationUpdates(this);
+
 			(new LoadingCategoriesAsyncTask(AppStatus.getInstance()
 					.getLanguage())).execute();
 		}

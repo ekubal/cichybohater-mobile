@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -137,6 +138,21 @@ public class AppStatus implements LocationListener {
 			}
 		}
 		return null;
+	}
+
+	public void disableLocationUpdates(Context context) {
+		LocationManager locManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		locManager.removeUpdates(this);
+	}
+
+	public void enableLocationUpdates(Context context) {
+		LocationManager locManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,
+				1, AppStatus.getInstance());
+		locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+				10000, 1, AppStatus.getInstance());
 	}
 
 }

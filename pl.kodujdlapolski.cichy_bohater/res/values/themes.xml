@@ -3,7 +3,28 @@
 
     <!-- the theme applied to the application or activity -->
     <style name="CichyBohaterTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:background">@color/activity_background</item>
+        <item name="android:textViewStyle">@style/CichyBohaterTextViewStyle</item>
+        <item name="android:textViewStyle">@style/CichyBohaterTextViewStyle</item>
+        <item name="android:buttonStyle">@style/CichyBohaterButtonStyle</item>
+        <item name="android:editTextStyle">@style/CichyBohaterEditTextStyle</item>
+    </style>
 
+
+    <style name="CichyBohaterTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CichyBohaterButtonStyle" parent="android:Widget.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">@color/button_background_color</item>
+    </style>
+
+    <style name="CichyBohaterEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:drawable">@drawable/category_list_item_shape</item>
     </style>
 
 </resources>

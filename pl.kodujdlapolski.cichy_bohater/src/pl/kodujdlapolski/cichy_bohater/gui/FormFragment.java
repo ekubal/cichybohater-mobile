@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,6 +109,9 @@ public class FormFragment extends Fragment implements HeroFormInterface {
 			if (view instanceof EditText) {
 				EditText editText = (EditText) view;
 				values.put(entry.getKey(), editText.getText().toString());
+			} else if (view instanceof CheckBox) {
+				CheckBox checkBox = (CheckBox) view;
+				values.put(entry.getKey(), checkBox.isChecked() ? "1" : "0");
 			} else if (view instanceof ImageView) {
 				ImageView imgView = (ImageView) view;
 				Bitmap bitmap = formBitmaps.get(imgView.getTag());
