@@ -4,6 +4,7 @@ import java.util.List;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.data.Category;
+import pl.kodujdlapolski.cichy_bohater.data.Schema;
 import retrofit.RestAdapter;
 
 public class CichyBohaterRestAdapter {
@@ -22,5 +23,10 @@ public class CichyBohaterRestAdapter {
 
 	public Category getCategory(int id) {
 		return service.getCategory(id);
+	}
+
+	public List<Schema> getSchemas(String language, double locationLat,
+			double locationLgt) {
+		return service.getSchemas(language, locationLat, locationLgt);
 	}
 }

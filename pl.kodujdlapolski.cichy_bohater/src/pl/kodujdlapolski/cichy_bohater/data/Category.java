@@ -61,4 +61,8 @@ public class Category implements Serializable {
 	public Organization getOrganization() {
 		return organization;
 	}
+
+	public String getDescription() {
+		return name;
+	}
 }

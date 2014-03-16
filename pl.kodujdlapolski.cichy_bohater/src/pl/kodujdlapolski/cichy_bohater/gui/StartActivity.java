@@ -6,12 +6,11 @@ import java.util.List;
 import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.data.Category;
+import pl.kodujdlapolski.cichy_bohater.data.Schema;
+import pl.kodujdlapolski.cichy_bohater.gps.LocationHelper;
 import pl.kodujdlapolski.cichy_bohater.rest.CichyBohaterRestAdapter;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -23,58 +22,52 @@ public class StartActivity extends BaseAcitivity {
 		setContentView(R.layout.activity_start);
 
 		// enable localization service
-		final LocationManager locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		String locationProvider = locManager.getBestProvider(new Criteria(),
-				false);
-
-		Location currentLocation = locManager
-				.getLastKnownLocation(locationProvider);
+		Location currentLocation = LocationHelper.getLastKnownLocation(this);
 		if (currentLocation == null) {
-			// Intent intent = new Intent(StartActivity.this,
-			// EmergencyActivity.class);
-			// startActivity(intent);
-			// finish();
+			// TODO GPS disabled, fix me!
 		} else {
-			AppStatus.getInstance().setCurrentLocation(currentLocation);
-
+			if (AppStatus.getCurrentLocation() == null) {
+				AppStatus.getInstance().setCurrentLocation(currentLocation);
+			}
 			AppStatus.getInstance().enableLocationUpdates(this);
 
+			currentLocation = AppStatus.getCurrentLocation();
+
 			(new LoadingCategoriesAsyncTask(AppStatus.getInstance()
-					.getLanguage())).execute();
+					.getLanguage(), currentLocation)).execute();
 		}
 	}
 
 	// loading categories data from API
 	private class LoadingCategoriesAsyncTask extends
-			AsyncTask<String, Void, List<Category>> {
+			AsyncTask<String, Void, List<Schema>> {
 		private String language;
+		private Location location;
 
-		public LoadingCategoriesAsyncTask(String language) {
+		public LoadingCategoriesAsyncTask(String language, Location location) {
 			this.language = language;
+			this.location = location;
 		}
 
 		@Override
-		protected List<Category> doInBackground(String... langs) {
+		protected List<Schema> doInBackground(String... langs) {
 
 			if (AppStatus.getInstance().isOffline(StartActivity.this)) {
-				// Intent intent = new Intent(StartActivity.this,
-				// EmergencyActivity.class);
-				// StartActivity.this.startActivity(intent);
-				// StartActivity.this.finish();
+				// TODO device is offline
 				return null;
 			}
 			CichyBohaterRestAdapter adapter = new CichyBohaterRestAdapter();
-			return adapter.getCategories(this.language);
+			return adapter.getSchemas(language, location.getLatitude(),
+					location.getLongitude());
 		}
 
 		@Override
-		protected void onPostExecute(List<Category> result) {
+		protected void onPostExecute(List<Schema> result) {
 			if (result != null) {
-				ArrayList<Category> categoriesList = new ArrayList<Category>(
-						result);
+				ArrayList<Schema> schemasList = new ArrayList<Schema>(result);
 				Intent intent = new Intent(StartActivity.this,
 						MenuActivity.class);
-				intent.putExtra(Constants.CATEGORIES_LIST_EXTRA, categoriesList);
+				intent.putExtra(Constants.SCHEMA_LIST_EXTRA, schemasList);
 				StartActivity.this.startActivity(intent);
 				StartActivity.this.finish();
 			}

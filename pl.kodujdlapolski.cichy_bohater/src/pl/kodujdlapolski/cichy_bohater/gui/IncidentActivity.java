@@ -10,8 +10,8 @@ import java.util.Map.Entry;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.data.Category;
-import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
+import pl.kodujdlapolski.cichy_bohater.data.Field;
+import pl.kodujdlapolski.cichy_bohater.data.Schema;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -32,12 +32,12 @@ import android.widget.Spinner;
 public class IncidentActivity extends BaseAcitivity implements
 		HeroFormInterface {
 
-	private Category incidentCategory;
+	private Schema interventionSchema;
 	private static ContentValues formData;
 	// map for references to edit views
 	private Map<String, View> formViews = new HashMap<String, View>();
 	// map for bitmaps from form
-	private Map<String, Bitmap> formBitmaps = new HashMap<String, Bitmap>();
+	private static Map<String, Bitmap> formBitmaps = new HashMap<String, Bitmap>();
 
 	private View selectedInput;
 
@@ -46,17 +46,17 @@ public class IncidentActivity extends BaseAcitivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_incident);
 
-		LinearLayout incidentLayout = (LinearLayout) findViewById(R.id.incident_form);
-		incidentCategory = getCategoryFromIntent();
-		addFormAttributes(incidentLayout,
-				incidentCategory.getCategoryAttributes());
+		formBitmaps = new HashMap<String, Bitmap>();
 
-		setAppTitle(incidentCategory.getName());
+		LinearLayout interventionLayout = (LinearLayout) findViewById(R.id.incident_form);
+		interventionSchema = getCategoryFromIntent();
+		addFormAttributes(interventionLayout, interventionSchema.getFields());
+
+		setAppTitle(interventionSchema.getLabel());
 	}
 
-	private void addFormAttributes(LinearLayout layout,
-			List<CategoryAttribute> attributes) {
-		for (CategoryAttribute attribute : attributes) {
+	private void addFormAttributes(LinearLayout layout, List<Field> attributes) {
+		for (Field attribute : attributes) {
 			View attributeView = FormWidgetsGenerator.createViewFromAttribute(
 					attribute, this);
 			if (attributeView != null) {
@@ -69,7 +69,7 @@ public class IncidentActivity extends BaseAcitivity implements
 	public void onSendButtonClick(View view) {
 		Intent intent = new Intent(this, SummaryActivity.class);
 		formData = getValuesFromAllInputs();
-		intent.putExtra(Constants.CATEGORY_EXTRA, incidentCategory);
+		intent.putExtra(Constants.SCHEMA_EXTRA, interventionSchema);
 		startActivity(intent);
 	}
 
@@ -101,6 +101,10 @@ public class IncidentActivity extends BaseAcitivity implements
 
 	public static ContentValues getFormData() {
 		return formData;
+	}
+
+	public static Bitmap getBitmap(String bitmapKey) {
+		return formBitmaps.get(bitmapKey);
 	}
 
 	@Override

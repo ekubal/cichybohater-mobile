@@ -17,6 +17,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AppStatus implements LocationListener {
 	private static AppStatus instance = new AppStatus();
@@ -96,8 +97,8 @@ public class AppStatus implements LocationListener {
 	}
 
 	@Override
-	public void onLocationChanged(Location location) {
-		this.location = location;
+	public void onLocationChanged(Location loc) {
+		this.location = loc;
 	}
 
 	@Override
@@ -125,16 +126,10 @@ public class AppStatus implements LocationListener {
 				List<Address> addressesList = gc.getFromLocation(
 						location.getLatitude(), location.getLongitude(), 1);
 				Address address = addressesList.get(0);
-				// for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-				// Log.e("=Adress=", address.getAddressLine(i));
-				// }
-				Log.e("Thoroughfare", address.getThoroughfare());
-				if (address.getSubThoroughfare() != null)
-					Log.e("SubThoroughfare", address.getSubThoroughfare());
-				if (address.getLocality() != null)
-					Log.e("Locality", address.getLocality());
-				if (address.getSubLocality() != null)
-					Log.e("SubLocality", address.getSubLocality());
+
+//				Toast.makeText(context, "toString  " + address.toString(),
+//						Toast.LENGTH_LONG).show();
+				Log.e("Address toString", address.toString());
 				return address.getFeatureName() + "\n"
 						+ address.getPostalCode() + " " + address.getLocality();
 

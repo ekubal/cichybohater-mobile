@@ -2,7 +2,7 @@ package pl.kodujdlapolski.cichy_bohater.gui;
 
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
+import pl.kodujdlapolski.cichy_bohater.data.Field;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.MediaStore;
@@ -19,25 +19,25 @@ import android.widget.TextView;
 
 public class FormWidgetsGenerator {
 
-	public static View createViewFromAttribute(
-			final CategoryAttribute attribute, final HeroFormInterface heroForm) {
-		String attributeType = attribute.getAttributeType();
-		if (attributeType.equals("Select")) {
+	public static View createViewFromAttribute(final Field attribute,
+			final HeroFormInterface heroForm) {
+		String attributeType = attribute.getType();
+		if (attributeType.equals(Constants.COMBO_FIELD_TYPE)) {
 			return createSelectField(attribute, heroForm);
-		} else if (attributeType.equals("Checkbox")) {
+		} else if (attributeType.equals(Constants.CHECKBOX_FIELD_TYPE)) {
 			return createCheckboxField(attribute, heroForm);
-		} else if (attributeType.equals("Text")) {
+		} else if (attributeType.equals(Constants.TEXT_FIELD_TYPE)) {
 			return createEditTextField(attribute, heroForm,
 					InputType.TYPE_CLASS_TEXT);
-		} else if (attributeType.equals("Textarea")) {
+		} else if (attributeType.equals(Constants.TEXT_AREA_FIELD_TYPE)) {
 			return createEditTextField(attribute, heroForm,
 					InputType.TYPE_CLASS_TEXT
 							| InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-		} else if (attributeType.equals("Number")) {
+		} else if (attributeType.equals(Constants.NUMBER_FIELD_TYPE)) {
 			return createEditTextField(attribute, heroForm,
 					InputType.TYPE_CLASS_NUMBER
 							| InputType.TYPE_NUMBER_FLAG_DECIMAL);
-		} else if (attributeType.equals("Photo")) {
+		} else if (attributeType.equals(Constants.PHOTO_FIELD_TYPE)) {
 			return createPhotoField(attribute, heroForm);
 		} else {
 			return null;
@@ -45,7 +45,7 @@ public class FormWidgetsGenerator {
 
 	}
 
-	private static View createEditTextField(final CategoryAttribute attribute,
+	private static View createEditTextField(final Field attribute,
 			final HeroFormInterface heroForm, int inputType) {
 		Context context = heroForm.getActivity();
 		LayoutInflater inflater = (LayoutInflater) context
@@ -62,7 +62,7 @@ public class FormWidgetsGenerator {
 		return layout;
 	}
 
-	private static View createCheckboxField(final CategoryAttribute attribute,
+	private static View createCheckboxField(final Field attribute,
 			final HeroFormInterface heroForm) {
 		Context context = heroForm.getActivity();
 		LayoutInflater inflater = (LayoutInflater) context
@@ -77,7 +77,7 @@ public class FormWidgetsGenerator {
 		return layout;
 	}
 
-	private static View createSelectField(final CategoryAttribute attribute,
+	private static View createSelectField(final Field attribute,
 			final HeroFormInterface heroForm) {
 		Context context = heroForm.getActivity();
 		LayoutInflater inflater = (LayoutInflater) context
@@ -99,7 +99,7 @@ public class FormWidgetsGenerator {
 		return layout;
 	}
 
-	private static View createPhotoField(final CategoryAttribute attribute,
+	private static View createPhotoField(final Field attribute,
 			final HeroFormInterface heroForm) {
 		Context context = heroForm.getActivity();
 		LayoutInflater inflater = (LayoutInflater) context

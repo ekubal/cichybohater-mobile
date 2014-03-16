@@ -4,26 +4,25 @@ import java.util.List;
 
 import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
-import pl.kodujdlapolski.cichy_bohater.data.Category;
+import pl.kodujdlapolski.cichy_bohater.data.Schema;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 public abstract class BaseAcitivity extends ActionBarActivity {
 
-	protected List<Category> getCategoriesFromIntent() {
+	protected List<Schema> getCategoriesFromIntent() {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			return ((List<Category>) extras
-					.get(Constants.CATEGORIES_LIST_EXTRA));
+			return ((List<Schema>) extras.get(Constants.SCHEMA_LIST_EXTRA));
 		} else {
 			return null;
 		}
 	}
 
-	protected Category getCategoryFromIntent() {
+	protected Schema getCategoryFromIntent() {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			return (Category) extras.get(Constants.CATEGORY_EXTRA);
+			return (Schema) extras.get(Constants.SCHEMA_EXTRA);
 		} else {
 			return null;
 		}

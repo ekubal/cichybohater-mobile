@@ -13,12 +13,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import pl.kodujdlapolski.cichy_bohater.AppStatus;
 import pl.kodujdlapolski.cichy_bohater.Constants;
 import pl.kodujdlapolski.cichy_bohater.R;
-import pl.kodujdlapolski.cichy_bohater.data.Category;
-import pl.kodujdlapolski.cichy_bohater.data.CategoryAttribute;
+import pl.kodujdlapolski.cichy_bohater.data.Field;
+import pl.kodujdlapolski.cichy_bohater.data.Schema;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,12 +27,13 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SummaryActivity extends BaseAcitivity {
 
-	private Category incidentCategory;
+	private Schema interventionSchema;
 	private ContentValues inputValues;
 	private AlertDialog loadingDialog;
 
@@ -42,26 +44,25 @@ public class SummaryActivity extends BaseAcitivity {
 
 		inputValues = IncidentActivity.getFormData();
 
-		incidentCategory = getCategoryFromIntent();
-		setAppTitle(incidentCategory.getName());
+		interventionSchema = getCategoryFromIntent();
+		setAppTitle(interventionSchema.getLabel());
 
 		LinearLayout fragmentLayout = (LinearLayout) findViewById(R.id.summary_inputs);
 		LayoutInflater inflater = getLayoutInflater();
 
-		TextView summaryCategory = (TextView) findViewById(R.id.summary_category);
-		summaryCategory.setText(incidentCategory.getName());
+		TextView summaryCategoryDescription = (TextView) findViewById(R.id.summary_category);
+		summaryCategoryDescription.setText(interventionSchema.getDescription());
 
-		List<CategoryAttribute> attributes = incidentCategory
-				.getCategoryAttributes();
-		for (CategoryAttribute attribute : attributes) {
-			String attributeType = attribute.getAttributeType();
+		List<Field> attributes = interventionSchema.getFields();
+		for (Field attribute : attributes) {
+			String attributeType = attribute.getType();
 			String attributeName = attribute.getPermalink();
 			String attributeValue = inputValues.getAsString(attributeName);
 			if (attributeType != null && attributeValue != null) {
-				if (attributeType.equals("Text")
-						|| attributeType.equals("Textarea")
-						|| attributeType.equals("Number")
-						|| attributeType.equals("Select")) {
+				if (attributeType.equals(Constants.TEXT_FIELD_TYPE)
+						|| attributeType.equals(Constants.TEXT_AREA_FIELD_TYPE)
+						|| attributeType.equals(Constants.NUMBER_FIELD_TYPE)
+						|| attributeType.equals(Constants.COMBO_FIELD_TYPE)) {
 					View layout = inflater.inflate(
 							R.layout.summary_fragment_text, null, false);
 					TextView attributeLabel = (TextView) layout
@@ -71,7 +72,7 @@ public class SummaryActivity extends BaseAcitivity {
 							.findViewById(R.id.summary_text);
 					inputText.setText(attributeValue);
 					fragmentLayout.addView(layout);
-				} else if (attributeType.equals("Checkbox")) {
+				} else if (attributeType.equals(Constants.CHECKBOX_FIELD_TYPE)) {
 					View layout = inflater.inflate(
 							R.layout.summary_fragment_text, null, false);
 					TextView attributeLabel = (TextView) layout
@@ -82,20 +83,19 @@ public class SummaryActivity extends BaseAcitivity {
 					inputText.setText(attributeValue.equals("1") ? R.string.yes
 							: R.string.no);
 					fragmentLayout.addView(layout);
-				} else if (attributeType.equals("Photo")) {
+				} else if (attributeType.equals(Constants.PHOTO_FIELD_TYPE)) {
 					View layout = inflater.inflate(
 							R.layout.summary_fragment_photo, null, false);
 					TextView attributeLabel = (TextView) layout
 							.findViewById(R.id.summary_label);
 					attributeLabel.setText(attribute.getName() + ":");
-					// ImageView imageView = (ImageView) layout
-					// .findViewById(R.id.summary_photo);
-					// byte[] encodeByte = Base64.decode(attributeValue,
-					// Base64.DEFAULT);
-					// Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte,
-					// 0,
-					// encodeByte.length);
-					// imageView.setImageBitmap(bitmap);
+					ImageView imageView = (ImageView) layout
+							.findViewById(R.id.summary_photo);
+					Bitmap bitmap = IncidentActivity.getBitmap(attributeName);
+					if (bitmap != null) {
+						imageView.setImageBitmap(IncidentActivity
+								.scaleDownBitmap(bitmap, 150, this));
+					}
 					fragmentLayout.addView(layout);
 				}
 			}
@@ -157,7 +157,7 @@ public class SummaryActivity extends BaseAcitivity {
 
 	private HttpResponse doPostRequest(ContentValues values) {
 
-		String urlString = Constants.create_incident_url;
+		String urlString = Constants.create_intervention_url;
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(urlString);
@@ -166,25 +166,25 @@ public class SummaryActivity extends BaseAcitivity {
 					.create();
 			entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-			List<CategoryAttribute> categoryAttributes = incidentCategory
-					.getCategoryAttributes();
+			List<Field> categoryAttributes = interventionSchema.getFields();
 
-			for (CategoryAttribute attribute : categoryAttributes) {
-				if (attribute.getAttributeType().equals("Photo")) {
+			for (Field attribute : categoryAttributes) {
+				if (attribute.getType().equals(Constants.PHOTO_FIELD_TYPE)) {
 					byte[] value = inputValues.getAsByteArray(attribute
 							.getPermalink());
 					if (value != null) {
 						entityBuilder.addBinaryBody(
-								"incident[" + attribute.getPermalink() + "]",
-								value);
+								"intervention[" + attribute.getPermalink()
+										+ "]", value);
 					}
-				} else if (attribute.getAttributeType().equals("Checkbox")) {
+				} else if (attribute.getType().equals(
+						Constants.CHECKBOX_FIELD_TYPE)) {
 					String value = inputValues.getAsString(attribute
 							.getPermalink());
 					if (value != null) {
 						entityBuilder.addTextBody(
-								"incident[" + attribute.getPermalink() + "]",
-								value);
+								"intervention[" + attribute.getPermalink()
+										+ "]", value);
 					}
 				}
 
@@ -193,12 +193,12 @@ public class SummaryActivity extends BaseAcitivity {
 							.getPermalink());
 					if (value != null) {
 						entityBuilder.addTextBody(
-								"incident[" + attribute.getPermalink() + "]",
-								value);
+								"intervention[" + attribute.getPermalink()
+										+ "]", value);
 					}
 				}
 			}
-			entityBuilder.addTextBody("category_id", incidentCategory.getId()
+			entityBuilder.addTextBody("category_id", interventionSchema.getId()
 					.toString());
 			entityBuilder.addTextBody("device_id", AppStatus.getInstance()
 					.getDeviceId(this));

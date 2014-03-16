@@ -51,4 +51,13 @@ public class LocationHelper {
 				.getSystemService(Context.LOCATION_SERVICE);
 		return service.isProviderEnabled(LocationManager.GPS_PROVIDER);
 	}
+
+	public static Location getLastKnownLocation(Context context) {
+		final LocationManager locManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		String locationProvider = locManager.getBestProvider(new Criteria(),
+				false);
+
+		return locManager.getLastKnownLocation(locationProvider);
+	}
 }

@@ -16,5 +16,4 @@ public class LoadingDialog {
 		builder.setView(dialogView);
 		return builder.create();
 	}
-
 }
